@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public static class CheckerComponent
+{
+    private static readonly Dictionary<string, Type> GlobalTypeCache = new();
+
+    static CheckerComponent()
+    {
+        CacheAllTypes(); // Populate type cache at startup
+    }
+
+    public static IReceiver GetCheckerComponent(Collider2D other, ICheckerUser checkerUser)
+    {
+        if (!checkerUser.IsCacheInitialized)
+        {
+            checkerUser.TypeCache = new Dictionary<string, Type>(GlobalTypeCache);
+            checkerUser.IsCacheInitialized = true;
+        }
+
+        if (!checkerUser.TypeCache.TryGetValue(checkerUser.StatTriggerFlyweight.Receiver, out Type checkerType))
+        {
+            Debug.LogWarning($"[{nameof(StatsTrigger)}] Checker type '{checkerUser.StatTriggerFlyweight.Receiver}' could not be found.");
+            return null;
+        }
+
+        if (other.TryGetComponent(checkerType, out var component) && component is IReceiver receiver)
+        {
+            return receiver;
+        }
+
+        Debug.LogWarning($"[{nameof(StatsTrigger)}] '{checkerUser.StatTriggerFlyweight.Receiver}' component is missing on {other.name}.");
+        return null;
+    }
+
+    private static void CacheAllTypes()
+    {
+#if UNITY_EDITOR
+        // Faster lookups using UnityEditor.TypeCache
+        foreach (Type type in TypeCache.GetTypesDerivedFrom<IReceiver>())
+        {
+            GlobalTypeCache.TryAdd(type.Name, type);
+        }
+#else
+        // Register known types explicitly to avoid runtime reflection
+        RegisterType<BodyReceiver>();  // Add all expected IReceiver types here
+        RegisterType<FootReceiver>();
+#endif
+    }
+
+    private static void RegisterType<T>() where T : IReceiver
+    {
+        GlobalTypeCache.TryAdd(typeof(T).Name, typeof(T));
+    }
+}

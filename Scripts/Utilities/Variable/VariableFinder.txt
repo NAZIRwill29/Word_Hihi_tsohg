@@ -1,0 +1,162 @@
+using UnityEngine;
+//using System.Reflection;
+using System.Collections.Generic;
+using System;
+
+public static class VariableFinder
+{
+    /// <summary>
+    /// Retrieve any variable contain name from a given list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public static T GetVariableContainNameFromList<T>(List<T> list, string name) where T : class
+    {
+        if (list == null || list.Count == 0)
+            return null;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            T item = list[i];
+
+            // Use reflection to check if the object has a "Name" property
+            PropertyInfo nameProperty = typeof(T).GetProperty("Name");
+            if (nameProperty != null)
+            {
+                string itemName = nameProperty.GetValue(item) as string;
+                if (!string.IsNullOrEmpty(itemName) && string.Equals(itemName, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return item; // Return the matched variable
+                }
+            }
+        }
+
+        return null; // Not found
+    }
+
+    /// <summary>
+    /// Retrieve any variable from a given list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="variableName"></param>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    public static bool TryGetVariableFromList<T>(List<object> list, string variableName, out T result) where T : NameVariable
+    {
+        result = null;
+
+        if (list == null || list.Count == 0)
+            return false;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] is T nv && string.Equals(nv.Name, variableName, StringComparison.OrdinalIgnoreCase))
+            {
+                result = nv;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Retrieve any variable contain name from a given list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="name"></param>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    public static bool TryGetVariableContainNameFromList<T>(List<T> list, string name, out T result) where T : class
+    {
+        result = null;
+
+        if (list == null || list.Count == 0 || string.IsNullOrEmpty(name))
+            return false;
+
+        // Use reflection once to find the "Name" property
+        PropertyInfo nameProperty = typeof(T).GetProperty("Name");
+        if (nameProperty == null)
+            return false; // The type doesn't have a "Name" property
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            T item = list[i];
+
+            string itemName = nameProperty.GetValue(item) as string;
+            if (!string.IsNullOrEmpty(itemName) && string.Equals(itemName, name, StringComparison.OrdinalIgnoreCase))
+            {
+                result = item;
+                return true;
+            }
+        }
+
+        return false; // No match found
+    }
+
+    /// <summary>
+    /// Retrieve any variable contain name from a given array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="array"></param>
+    /// <param name="name"></param>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    public static bool TryGetVariableContainNameFromArray<T>(T[] array, string name, out T result) where T : class
+    {
+        result = null;
+
+        if (array == null || array.Length == 0 || string.IsNullOrEmpty(name))
+            return false;
+
+        // Use reflection once to find the "Name" property
+        PropertyInfo nameProperty = typeof(T).GetProperty("Name");
+        if (nameProperty == null)
+            return false; // The type doesn't have a "Name" property
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            T item = array[i];
+
+            string itemName = nameProperty.GetValue(item) as string;
+            if (!string.IsNullOrEmpty(itemName) && string.Equals(itemName, name, StringComparison.OrdinalIgnoreCase))
+            {
+                result = item;
+                return true;
+            }
+        }
+
+        return false; // No match found
+    }
+
+    /// <summary>
+    /// Retrieve any variable from a given array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="array"></param>
+    /// <param name="variable"></param>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    public static bool TryGetVariableFromArray<T>(T[] array, T variable, out T result) where T : class
+    {
+        result = null;
+
+        if (array == null || array.Length == 0 || variable == null)
+            return false;
+
+        // Loop through the array to find the matching variable
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (EqualityComparer<T>.Default.Equals(array[i], variable))
+            {
+                result = array[i];
+                return true;
+            }
+        }
+
+        return false; // No match found
+    }
+}
