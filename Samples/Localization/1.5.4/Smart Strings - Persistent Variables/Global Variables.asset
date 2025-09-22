@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e3e22ff9634e441a479f01f905a2f7, type: 3}
+  m_Name: Global Variables
+  m_EditorClassIdentifier: 
+  m_Variables:
+  - name: player-name
+    variable:
+      rid: 0
+  - name: player
+    variable:
+      rid: 1
+  - name: weapons
+    variable:
+      rid: 2
+  - name: time-now
+    variable:
+      rid: 3
+  - name: word
+    variable:
+      rid: 2348478999301718159
+  references:
+    version: 2
+    RefIds:
+    - rid: 0
+      type: {class: StringVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
+      data:
+        m_Value: Player 1
+    - rid: 1
+      type: {class: NestedVariablesGroup, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
+      data:
+        m_Value: {fileID: 11400000, guid: b33659680abccdc4b85d1b4ad1689060, type: 2}
+    - rid: 2
+      type: {class: WeaponDamageGroup, ns: UnityEngine.Localization.Samples, asm: Unity.Localization.Samples.PersistentVariables}
+      data: 
+    - rid: 3
+      type: {class: CurrentTime, ns: UnityEngine.Localization.Samples, asm: Unity.Localization.Samples.PersistentVariables}
+      data: 
+    - rid: 2348478999301718159
+      type: {class: StringVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
+      data:
+        m_Value: loop
