@@ -1,58 +1,51 @@
 # Word_Hihi_tsohg
 
-## 🕸 Master Wireframe – *Word_Hihi_tsohg*
-
 ```mermaid
-flowchart TD
+graph TD
+    A(Game Manager)
+    B(State Machine)
+    C(UI Manager)
+    D(Word System)
+    E(Player Manager)
+    F(Audio Manager)
+    G(Data Persistence)
+    H(Utility Systems)
 
-    %% Core
-    GM[GameManager<br/>central game state control]
-    IM[InputManagerSO<br/>input storage & bindings]
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    A --> G
+    A --> H
 
-    %% Word System
-    WI[WordInput<br/>checks keystrokes]
-    WM[WordManager<br/>tracks words & typing progress]
-    WS[WordSpawner<br/>spawns word objects]
-    WUI[WordUI<br/>shows words on screen]
+    B -->|Controls| I(Main Menu State)
+    B -->|Controls| J(Gameplay State)
+    B -->|Controls| K(Pause State)
+    B -->|Controls| L(Struggle State)
+    B -->|Controls| M(Game Over State)
 
-    %% Ghost System
-    GC[GhostController<br/>ghost logic & AI]
-    GSp[GhostSpawner<br/>spawns ghosts]
-    GUI[GhostUI<br/>ghost HP / warnings]
-    SM[StruggleManager<br/>handles ghost attacks]
+    C -->|Displays| N(Menus)
+    C -->|Shows| O(Gameplay HUD)
+    C -->|Handles| P(User Input)
+    C -->|Updates| Q(UI Events)
 
-    %% Book
-    BS[BookSystem<br/>lore & powers]
+    D -->|Loads| R(Word Lists)
+    D -->|Selects| S(Current Word)
+    D -->|Validates| T(Input Validation)
+    D -->|Tracks| U(Word Usage)
 
-    %% UI
-    UIM[UIManager<br/>interface flow]
-    MM[MainMenu]
-    PM[PauseMenu]
-    GO[GameOverUI]
+    E -->|Tracks| V(Score)
+    E -->|Handles| W(Progression)
+    E -->|Responds| X(Word Entries)
 
-    %% Utility
-    AM[AudioManager<br/>SFX & BGM]
-    SL[SceneLoader<br/>scene transitions]
-    YS[YSort / YSortUniversal<br/>2D sprite depth]
+    F -->|Plays| Y(Sound Effects)
+    F -->|Plays| Z(Music)
 
-    %% Connections
-    GM --> IM
-    IM --> WI
-    WI --> WM
-    WM --> WS
-    WM --> WUI
-    WM --> GC
+    G -->|Saves| AA(High Scores)
+    G -->|Manages| AB(Storage)
 
-    GC --> GSp
-    GC --> GUI
-    GC --> SM
-
-    GM --> BS
-    GM --> UIM
-    UIM --> MM
-    UIM --> PM
-    UIM --> GO
-
-    GM --> AM
-    GM --> SL
-    GM --> YS
+    H -->|Handles| AC(Timer/Countdown)
+    H -->|Manages| AD(Difficulty)
+    H -->|Handles| AE(Error Logging)
+```
