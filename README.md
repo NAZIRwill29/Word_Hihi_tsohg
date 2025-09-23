@@ -1,51 +1,72 @@
 # Word_Hihi_tsohg
 
 ```mermaid
-graph TD
-    A(Game Manager)
-    B(State Machine)
-    C(UI Manager)
-    D(Word System)
-    E(Player Manager)
-    F(Audio Manager)
-    G(Data Persistence)
-    H(Utility Systems)
+flowchart TD
 
-    A --> B
-    A --> C
-    A --> D
-    A --> E
-    A --> F
-    A --> G
-    A --> H
+%% ===================
+%% CORE SYSTEMS
+%% ===================
+InputManagerSO --> InputReader --> GameManager
+InputReader --> RebindManager --> RebindActionUI --> UIManager --> GameManager
+GameManager --> AudioManager & SceneLoader
 
-    B -->|Controls| I(Main Menu State)
-    B -->|Controls| J(Gameplay State)
-    B -->|Controls| K(Pause State)
-    B -->|Controls| L(Struggle State)
-    B -->|Controls| M(Game Over State)
+%% ===================
+%% PLAYER SYSTEMS
+%% ===================
+InputManagerSO --> PlayerInput --> PlayerController
+PlayerController --> PlayerMovement --> PlayerAbilities
+PlayerAbilities --> PlayerShoot & PlayerMagic & PlayerMelee
+PlayerController --> PlayerHealth --> CombatUI --> UIManager
+UIManager --> GameManager
 
-    C -->|Displays| N(Menus)
-    C -->|Shows| O(Gameplay HUD)
-    C -->|Handles| P(User Input)
-    C -->|Updates| Q(UI Events)
+%% ===================
+%% ENEMY SYSTEMS
+%% ===================
+EnemyAI --> EnemyController --> EnemyHealth
+EnemyController --> EnemyCombat --> CombatManager --> EnemyUI --> GameManager
 
-    D -->|Loads| R(Word Lists)
-    D -->|Selects| S(Current Word)
-    D -->|Validates| T(Input Validation)
-    D -->|Tracks| U(Word Usage)
+%% ===================
+%% ENVIRONMENT SYSTEMS
+%% ===================
+PlayerController --> Interactables --> Collectibles --> PlayerHealth
+Collectibles --> PlayerAbilities
+Interactables --> AreaEffects --> PlayerHealth & EnemyHealth
+AreaEffects --> UIManager --> GameManager
 
-    E -->|Tracks| V(Score)
-    E -->|Handles| W(Progression)
-    E -->|Responds| X(Word Entries)
+%% ===================
+%% COMBAT SYSTEMS
+%% ===================
+InputManagerSO --> PlayerInput --> CombatManager
+CombatManager --> PlayerCombat --> EnemyCombat
+CombatManager --> CombatUI --> UIManager --> GameManager
 
-    F -->|Plays| Y(Sound Effects)
-    F -->|Plays| Z(Music)
+%% ===================
+%% UI SYSTEMS
+%% ===================
+InputManagerSO --> UIManager --> MainMenu & InGameUI & DialogueUI
+UIManager --> DialogueManager --> DialogueUI --> GameManager
 
-    G -->|Saves| AA(High Scores)
-    G -->|Manages| AB(Storage)
+%% ===================
+%% NAVIGATION SYSTEMS
+%% ===================
+NavMesh --> EnemyAI --> EnemyController
+NavMesh --> NavMeshModifier --> NavMeshSurface --> GameManager
 
-    H -->|Handles| AC(Timer/Countdown)
-    H -->|Manages| AD(Difficulty)
-    H -->|Handles| AE(Error Logging)
-```
+%% ===================
+%% UTILITY SYSTEMS
+%% ===================
+ObjectPooling --> PooledObject --> GameManager
+FlyweightPattern --> StatsDataFlyweight & AbilityDataFlyweight --> GameManager
+
+%% ===================
+%% SPECIALIZED SYSTEMS
+%% ===================
+MiniGameManager --> MiniGameSO --> UIManager
+TypingSystem --> WordSystem --> WordUI --> GameManager
+
+%% ===================
+%% VFX & AUDIO
+%% ===================
+GameManager --> VFXManager --> ExplosionEffect & HitEffect
+GameManager --> AudioManager --> ObjectAudio & ObjectAudioMulti
+
